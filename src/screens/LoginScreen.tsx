@@ -16,6 +16,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import * as Animatable from 'react-native-animatable';
 import { useAuth } from '../contexts/AuthContext';
+import { LoginTest } from '../components/LoginTest';
 
 const { height } = Dimensions.get('screen');
 
@@ -191,6 +192,11 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
               <TouchableOpacity onPress={navigateToRegister}>
                 <Text style={styles.registerLink}>Register as Teacher</Text>
               </TouchableOpacity>
+            </View>
+
+            {/* Temporary Login Test Component */}
+            <View style={styles.testContainer}>
+              <LoginTest />
             </View>
           </View>
         </Animatable.View>
@@ -403,5 +409,11 @@ const styles = StyleSheet.create({
     color: '#667eea',
     fontWeight: 'bold',
     marginLeft: 5,
+  },
+  testContainer: {
+    marginTop: 30,
+    padding: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderRadius: 15,
   },
 });
