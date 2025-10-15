@@ -60,6 +60,10 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
     setIsEditing(false);
   };
 
+  const handleManageQuestions = () => {
+    navigation.navigate('QuestionList');
+  };
+
   const handleLogout = () => {
     Alert.alert(
       'Logout',
@@ -223,6 +227,12 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
             </TouchableOpacity>
           </View>
         )}
+
+        {(user?.role === 'teacher' || user?.role === 'admin') && (
+          <TouchableOpacity style={styles.manageQuestionsButton} onPress={handleManageQuestions}>
+            <Text style={styles.manageQuestionsButtonText}>Manage Questions</Text>
+          </TouchableOpacity>
+        )}
       </View>
 
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
@@ -376,5 +386,17 @@ const styles = StyleSheet.create({
     color: '#FF3B30',
     textAlign: 'center',
     marginTop: 50,
+  },
+  manageQuestionsButton: {
+    backgroundColor: '#34C759',
+    margin: 20,
+    padding: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  manageQuestionsButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });

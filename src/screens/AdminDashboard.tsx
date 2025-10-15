@@ -18,7 +18,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ navigation }) =>
   };
 
   const handleManageQuestions = () => {
-    Alert.alert('Question Management', 'Question management functionality will be implemented in the next phase');
+    navigation.navigate('QuestionList');
   };
 
   const handleViewAnalytics = () => {

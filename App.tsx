@@ -8,6 +8,8 @@ import { RegisterScreen } from './src/screens/RegisterScreen';
 import { ProfileScreen } from './src/screens/ProfileScreen';
 import { StudentDashboard } from './src/screens/StudentDashboard';
 import { AdminDashboard } from './src/screens/AdminDashboard';
+import { QuestionListScreen } from './src/screens/QuestionListScreen';
+import { QuestionFormScreen } from './src/screens/QuestionFormScreen';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 
 const Stack = createStackNavigator();
@@ -38,6 +40,8 @@ const TeacherNavigator = () => (
     }}
   >
     <Stack.Screen name="Profile" component={ProfileScreen} />
+    <Stack.Screen name="QuestionList" component={QuestionListScreen} />
+    <Stack.Screen name="QuestionForm" component={QuestionFormScreen} />
   </Stack.Navigator>
 );
 
@@ -49,6 +53,8 @@ const AdminNavigator = () => (
   >
     <Stack.Screen name="AdminDashboard" component={AdminDashboard} />
     <Stack.Screen name="Profile" component={ProfileScreen} />
+    <Stack.Screen name="QuestionList" component={QuestionListScreen} />
+    <Stack.Screen name="QuestionForm" component={QuestionFormScreen} />
   </Stack.Navigator>
 );
 
