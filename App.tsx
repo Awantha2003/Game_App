@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
@@ -70,7 +70,7 @@ const AppNavigator = () => {
     case 'teacher':
       return <TeacherNavigator />;
     case 'student':
-      return <StudentDashboard />;
+      return <StudentDashboard navigation={null as any} />;
     default:
       return <AuthNavigator />;
   }
