@@ -60,6 +60,10 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
     navigation.navigate('ForgotPassword');
   };
 
+  const navigateToStudentSignup = () => {
+    navigation.navigate('StudentSignup');
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#667eea" />
@@ -164,6 +168,19 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
               onPress={navigateToForgotPassword}
             >
               <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={styles.studentSignupButton}
+              onPress={navigateToStudentSignup}
+            >
+              <LinearGradient
+                colors={['#4facfe', '#00f2fe']}
+                style={styles.studentSignupGradient}
+              >
+                <Ionicons name="person-add" size={20} color="#fff" />
+                <Text style={styles.studentSignupText}>Sign Up as Student</Text>
+              </LinearGradient>
             </TouchableOpacity>
 
             <View style={styles.registerContainer}>
@@ -341,6 +358,33 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#667eea',
     fontWeight: '600',
+  },
+  studentSignupButton: {
+    borderRadius: 15,
+    overflow: 'hidden',
+    marginTop: 15,
+    marginBottom: 20,
+    shadowColor: '#4facfe',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8,
+  },
+  studentSignupGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+  },
+  studentSignupText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginLeft: 8,
   },
   registerContainer: {
     flexDirection: 'row',

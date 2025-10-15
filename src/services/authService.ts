@@ -7,7 +7,29 @@ const API_BASE_URL = 'http://localhost:3000/api';
 export class AuthService {
   static async login(loginData: LoginData): Promise<AuthResponse> {
     try {
-      // For now, we'll use mock data. Replace with actual API call
+      // Check for specific teacher credentials
+      if (loginData.email === 't1@gmail.com' && loginData.password === 'Teacher123@') {
+        const mockResponse: AuthResponse = {
+          user: {
+            id: '2',
+            email: 't1@gmail.com',
+            name: 'Teacher User',
+            role: 'teacher',
+            isActive: true,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+          },
+          token: 'mock-jwt-token-' + Date.now()
+        };
+
+        // Store token and user data securely
+        await SecureStorageService.setToken(mockResponse.token);
+        await SecureStorageService.setUser(mockResponse.user);
+
+        return mockResponse;
+      }
+
+      // For other users, use generic mock data
       const mockResponse: AuthResponse = {
         user: {
           id: '1',
