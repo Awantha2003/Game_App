@@ -4,13 +4,20 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
 import { AuthProvider, useAuth } from './src/contexts/AuthContext';
+import { SplashScreen } from './src/screens/SplashScreen';
+import { OnboardingScreen } from './src/screens/OnboardingScreen';
 import { LoginScreen } from './src/screens/LoginScreen';
 import { RegisterScreen } from './src/screens/RegisterScreen';
 import { ProfileScreen } from './src/screens/ProfileScreen';
 import { StudentDashboard } from './src/screens/StudentDashboard';
+import { StudentHomeScreen } from './src/screens/StudentHomeScreen';
+import { PlayGameScreen } from './src/screens/PlayGameScreen';
+import { ResultScreen } from './src/screens/ResultScreen';
+import { StudentProgressScreen } from './src/screens/StudentProgressScreen';
 import { AdminDashboard } from './src/screens/AdminDashboard';
 import { QuestionListScreen } from './src/screens/QuestionListScreen';
 import { QuestionFormScreen } from './src/screens/QuestionFormScreen';
+import { ResultsListScreen } from './src/screens/ResultsListScreen';
 import { LevelListScreen } from './src/screens/LevelListScreen';
 import { LevelFormScreen } from './src/screens/LevelFormScreen';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
@@ -30,9 +37,25 @@ const AuthNavigator = () => (
       headerShown: false,
     }}
   >
+    <Stack.Screen name="Splash" component={SplashScreen} />
+    <Stack.Screen name="Onboarding" component={OnboardingScreen} />
     <Stack.Screen name="Login" component={LoginScreen} />
     <Stack.Screen name="Register" component={RegisterScreen} />
     <Stack.Screen name="StudentDashboard" component={StudentDashboard} />
+  </Stack.Navigator>
+);
+
+const StudentNavigator = () => (
+  <Stack.Navigator
+    screenOptions={{
+      headerShown: false,
+    }}
+  >
+    <Stack.Screen name="StudentDashboard" component={StudentDashboard} />
+    <Stack.Screen name="StudentHome" component={StudentHomeScreen} />
+    <Stack.Screen name="PlayGame" component={PlayGameScreen} />
+    <Stack.Screen name="Result" component={ResultScreen} />
+    <Stack.Screen name="StudentProgress" component={StudentProgressScreen} />
   </Stack.Navigator>
 );
 
@@ -47,6 +70,7 @@ const TeacherNavigator = () => (
     <Stack.Screen name="QuestionForm" component={QuestionFormScreen} />
     <Stack.Screen name="LevelList" component={LevelListScreen} />
     <Stack.Screen name="LevelForm" component={LevelFormScreen} />
+    <Stack.Screen name="ResultsList" component={ResultsListScreen} />
   </Stack.Navigator>
 );
 
@@ -62,6 +86,7 @@ const AdminNavigator = () => (
     <Stack.Screen name="QuestionForm" component={QuestionFormScreen} />
     <Stack.Screen name="LevelList" component={LevelListScreen} />
     <Stack.Screen name="LevelForm" component={LevelFormScreen} />
+    <Stack.Screen name="ResultsList" component={ResultsListScreen} />
   </Stack.Navigator>
 );
 
@@ -83,7 +108,7 @@ const AppNavigator = () => {
     case 'teacher':
       return <TeacherNavigator />;
     case 'student':
-      return <StudentDashboard navigation={null as any} />;
+      return <StudentNavigator />;
     default:
       return <AuthNavigator />;
   }

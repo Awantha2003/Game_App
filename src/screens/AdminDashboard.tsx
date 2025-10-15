@@ -21,6 +21,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ navigation }) =>
     navigation.navigate('QuestionList');
   };
 
+  const handleViewResults = () => {
+    navigation.navigate('ResultsList');
+  };
+
   const handleManageLevels = () => {
     navigation.navigate('LevelList');
   };
@@ -68,6 +72,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ navigation }) =>
           </Text>
           <TouchableOpacity style={styles.secondaryButton} onPress={handleManageLevels}>
             <Text style={styles.secondaryButtonText}>Manage Levels</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>📊 Student Results</Text>
+          <Text style={styles.cardDescription}>
+            View and manage student game results and progress
+          </Text>
+          <TouchableOpacity style={styles.secondaryButton} onPress={handleViewResults}>
+            <Text style={styles.secondaryButtonText}>View Results</Text>
           </TouchableOpacity>
         </View>
 

@@ -21,11 +21,11 @@ interface StudentDashboardProps {
 
 export const StudentDashboard: React.FC<StudentDashboardProps> = ({ navigation }) => {
   const handleStartGame = () => {
-    Alert.alert('Game', 'Game functionality will be implemented in the next phase');
+    navigation.navigate('StudentHome');
   };
 
   const handleViewResults = () => {
-    Alert.alert('Results', 'Results functionality will be implemented in the next phase');
+    navigation.navigate('StudentProgress');
   };
 
   const handleViewAchievements = () => {
