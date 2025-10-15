@@ -9,8 +9,15 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  Dimensions,
+  StatusBar,
 } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from '@expo/vector-icons';
+import * as Animatable from 'react-native-animatable';
 import { useAuth } from '../contexts/AuthContext';
+
+const { height } = Dimensions.get('screen');
 
 interface LoginScreenProps {
   navigation: any;
@@ -20,6 +27,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuth();
 
   const handleLogin = async () => {
@@ -49,99 +57,155 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   };
 
   return (
-    <KeyboardAvoidingView 
-      style={styles.container} 
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.formContainer}>
-          <Text style={styles.title}>Welcome Back</Text>
-          <Text style={styles.subtitle}>Sign in to your account</Text>
+    <View style={styles.container}>
+      <StatusBar barStyle="light-content" backgroundColor="#667eea" />
+      <LinearGradient
+        colors={['#667eea', '#764ba2']}
+        style={styles.gradient}
+      >
+        <View style={styles.header}>
+          <Animatable.View animation="fadeInDown" duration={1000}>
+            <View style={styles.logoContainer}>
+              <Ionicons name="school" size={60} color="#fff" />
+              <Text style={styles.logoText}>EduGame</Text>
+            </View>
+          </Animatable.View>
+        </View>
 
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Email</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Enter your email"
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoCorrect={false}
-            />
-          </View>
+        <Animatable.View 
+          animation="fadeInUp" 
+          duration={1000}
+          style={styles.footer}
+        >
+          <View style={styles.formContainer}>
+            <Text style={styles.title}>Welcome Back!</Text>
+            <Text style={styles.subtitle}>Sign in to continue your learning journey</Text>
 
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Password</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Enter your password"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-              autoCapitalize="none"
-            />
-          </View>
+            <View style={styles.inputWrapper}>
+              <View style={styles.inputContainer}>
+                <Ionicons name="mail" size={20} color="#667eea" style={styles.inputIcon} />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Email Address"
+                  placeholderTextColor="#999"
+                  value={email}
+                  onChangeText={setEmail}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                />
+              </View>
 
-          <TouchableOpacity
-            style={[styles.loginButton, isLoading && styles.disabledButton]}
-            onPress={handleLogin}
-            disabled={isLoading}
-          >
-            <Text style={styles.loginButtonText}>
-              {isLoading ? 'Signing In...' : 'Sign In'}
-            </Text>
-          </TouchableOpacity>
+              <View style={styles.inputContainer}>
+                <Ionicons name="lock-closed" size={20} color="#667eea" style={styles.inputIcon} />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Password"
+                  placeholderTextColor="#999"
+                  value={password}
+                  onChangeText={setPassword}
+                  secureTextEntry={!showPassword}
+                  autoCapitalize="none"
+                />
+                <TouchableOpacity 
+                  style={styles.eyeIcon}
+                  onPress={() => setShowPassword(!showPassword)}
+                >
+                  <Ionicons 
+                    name={showPassword ? "eye-off" : "eye"} 
+                    size={20} 
+                    color="#999" 
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
 
-          <View style={styles.registerContainer}>
-            <Text style={styles.registerText}>Don't have an account? </Text>
-            <TouchableOpacity onPress={navigateToRegister}>
-              <Text style={styles.registerLink}>Register as Teacher</Text>
+            <TouchableOpacity
+              style={[styles.loginButton, isLoading && styles.disabledButton]}
+              onPress={handleLogin}
+              disabled={isLoading}
+            >
+              <LinearGradient
+                colors={isLoading ? ['#ccc', '#999'] : ['#667eea', '#764ba2']}
+                style={styles.buttonGradient}
+              >
+                <Text style={styles.loginButtonText}>
+                  {isLoading ? 'Signing In...' : 'Sign In'}
+                </Text>
+                <Ionicons name="arrow-forward" size={20} color="#fff" />
+              </LinearGradient>
             </TouchableOpacity>
-          </View>
 
-          <View style={styles.studentInfo}>
-            <Text style={styles.studentText}>
-              Students can play without registration
-            </Text>
+            <View style={styles.divider}>
+              <View style={styles.dividerLine} />
+              <Text style={styles.dividerText}>OR</Text>
+              <View style={styles.dividerLine} />
+            </View>
+
             <TouchableOpacity 
               style={styles.studentButton}
               onPress={() => navigation.navigate('StudentDashboard')}
             >
-              <Text style={styles.studentButtonText}>Continue as Student</Text>
+              <LinearGradient
+                colors={['#4facfe', '#00f2fe']}
+                style={styles.studentButtonGradient}
+              >
+                <Ionicons name="play" size={20} color="#fff" />
+                <Text style={styles.studentButtonText}>Continue as Student</Text>
+              </LinearGradient>
             </TouchableOpacity>
+
+            <View style={styles.registerContainer}>
+              <Text style={styles.registerText}>Don't have an account? </Text>
+              <TouchableOpacity onPress={navigateToRegister}>
+                <Text style={styles.registerLink}>Register as Teacher</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+        </Animatable.View>
+      </LinearGradient>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
   },
-  scrollContainer: {
-    flexGrow: 1,
+  gradient: {
+    flex: 1,
+  },
+  header: {
+    flex: 0.4,
     justifyContent: 'center',
-    padding: 20,
+    alignItems: 'center',
+    paddingTop: 50,
+  },
+  logoContainer: {
+    alignItems: 'center',
+  },
+  logoText: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#fff',
+    marginTop: 10,
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
+  },
+  footer: {
+    flex: 0.6,
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    paddingHorizontal: 30,
+    paddingVertical: 30,
   },
   formContainer: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 24,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
+    flex: 1,
   },
   title: {
-    fontSize: 28,
+    fontSize: 32,
     fontWeight: 'bold',
     color: '#333',
     textAlign: 'center',
@@ -151,46 +215,117 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#666',
     textAlign: 'center',
-    marginBottom: 32,
+    marginBottom: 40,
+    lineHeight: 22,
+  },
+  inputWrapper: {
+    marginBottom: 30,
   },
   inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f8f9fa',
+    borderRadius: 15,
     marginBottom: 20,
+    paddingHorizontal: 15,
+    borderWidth: 1,
+    borderColor: '#e9ecef',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 2,
   },
-  label: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 8,
+  inputIcon: {
+    marginRight: 15,
   },
   input: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    padding: 12,
+    flex: 1,
+    paddingVertical: 18,
     fontSize: 16,
-    backgroundColor: '#f9f9f9',
+    color: '#333',
+  },
+  eyeIcon: {
+    padding: 5,
   },
   loginButton: {
-    backgroundColor: '#007AFF',
-    borderRadius: 8,
-    padding: 16,
-    alignItems: 'center',
-    marginTop: 8,
-    marginBottom: 24,
+    marginBottom: 20,
+    borderRadius: 15,
+    overflow: 'hidden',
+    shadowColor: '#667eea',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8,
   },
-  disabledButton: {
-    backgroundColor: '#ccc',
+  buttonGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 18,
+    paddingHorizontal: 30,
   },
   loginButtonText: {
-    color: 'white',
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginRight: 10,
+  },
+  disabledButton: {
+    opacity: 0.6,
+  },
+  divider: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 30,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: '#e9ecef',
+  },
+  dividerText: {
+    marginHorizontal: 20,
+    fontSize: 14,
+    color: '#999',
+    fontWeight: '500',
+  },
+  studentButton: {
+    marginBottom: 30,
+    borderRadius: 15,
+    overflow: 'hidden',
+    shadowColor: '#4facfe',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8,
+  },
+  studentButtonGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 18,
+    paddingHorizontal: 30,
+  },
+  studentButtonText: {
+    color: '#fff',
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: 'bold',
+    marginLeft: 10,
   },
   registerContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 24,
   },
   registerText: {
     fontSize: 16,
@@ -198,30 +333,8 @@ const styles = StyleSheet.create({
   },
   registerLink: {
     fontSize: 16,
-    color: '#007AFF',
-    fontWeight: '600',
-  },
-  studentInfo: {
-    borderTopWidth: 1,
-    borderTopColor: '#eee',
-    paddingTop: 24,
-    alignItems: 'center',
-  },
-  studentText: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 12,
-    textAlign: 'center',
-  },
-  studentButton: {
-    backgroundColor: '#34C759',
-    borderRadius: 8,
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-  },
-  studentButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
+    color: '#667eea',
+    fontWeight: 'bold',
+    marginLeft: 5,
   },
 });
