@@ -1,25 +1,68 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  Alert,
   Dimensions,
   StatusBar,
+  Animated,
+  Alert,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import * as Animatable from 'react-native-animatable';
 
-const { width } = Dimensions.get('window');
+const { height, width } = Dimensions.get('screen');
 
 interface StudentDashboardProps {
   navigation: any;
 }
 
 export const StudentDashboard: React.FC<StudentDashboardProps> = ({ navigation }) => {
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [stats, setStats] = useState({
+    totalGames: 24,
+    totalStars: 156,
+    currentStreak: 7,
+    bestScore: 95,
+  });
+
+  // Animation values
+  const fadeAnim = new Animated.Value(0);
+  const slideAnim = new Animated.Value(50);
+  const scaleAnim = new Animated.Value(0.9);
+
+  useEffect(() => {
+    // Entrance animations
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+      }),
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 1000,
+        useNativeDriver: true,
+      }),
+      Animated.spring(scaleAnim, {
+        toValue: 1,
+        tension: 50,
+        friction: 7,
+        useNativeDriver: true,
+      }),
+    ]).start();
+
+    // Update time every minute
+    const interval = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 60000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   const handleStartGame = () => {
     navigation.navigate('StudentHome');
   };
@@ -29,148 +72,326 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({ navigation }
   };
 
   const handleViewAchievements = () => {
-    Alert.alert('Achievements', 'Achievements functionality will be implemented in the next phase');
+    Alert.alert('Achievements', 'Coming soon! 🏆');
+  };
+
+  const handleSettings = () => {
+    navigation.navigate('Settings');
+  };
+
+  const getGreeting = () => {
+    const hour = currentTime.getHours();
+    if (hour < 12) return 'Good Morning';
+    if (hour < 17) return 'Good Afternoon';
+    return 'Good Evening';
   };
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#4facfe" />
+      <StatusBar barStyle="light-content" backgroundColor="#667eea" />
+      
+      {/* Animated Background */}
       <LinearGradient
-        colors={['#4facfe', '#00f2fe']}
-        style={styles.header}
+        colors={['#667eea', '#764ba2', '#f093fb']}
+        style={styles.backgroundGradient}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
       >
-        <Animatable.View animation="fadeInDown" duration={1000}>
+        {/* Floating elements */}
+        <View style={styles.floatingElements}>
+          {[...Array(15)].map((_, i) => (
+            <Animatable.View
+              key={i}
+              animation="pulse"
+              iterationCount="infinite"
+              duration={3000 + i * 200}
+              style={[
+                styles.floatingElement,
+                {
+                  left: Math.random() * width,
+                  top: Math.random() * height,
+                  opacity: Math.random() * 0.4 + 0.1,
+                }
+              ]}
+            />
+          ))}
+        </View>
+
+        {/* Header */}
+        <Animated.View 
+          style={[
+            styles.header,
+            {
+              opacity: fadeAnim,
+              transform: [{ translateY: slideAnim }]
+            }
+          ]}
+        >
           <View style={styles.headerContent}>
-            <View style={styles.welcomeContainer}>
-              <Text style={styles.welcomeText}>Welcome back!</Text>
-              <Text style={styles.title}>Ready to learn?</Text>
-              <Text style={styles.subtitle}>Choose your adventure and start playing educational games</Text>
+            <View style={styles.greetingContainer}>
+              <Text style={styles.greeting}>{getGreeting()}</Text>
+              <Text style={styles.studentName}>Student</Text>
             </View>
-            <View style={styles.avatarContainer}>
-              <LinearGradient
-                colors={['#fff', '#f0f8ff']}
-                style={styles.avatar}
+            <TouchableOpacity 
+              style={styles.settingsButton}
+              onPress={handleSettings}
+            >
+              <Ionicons name="settings" size={24} color="#fff" />
+            </TouchableOpacity>
+          </View>
+        </Animated.View>
+
+        {/* Main Content */}
+        <Animated.View 
+          style={[
+            styles.content,
+            {
+              opacity: fadeAnim,
+              transform: [
+                { translateY: slideAnim },
+                { scale: scaleAnim }
+              ]
+            }
+          ]}
+        >
+          <ScrollView 
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.scrollContent}
+          >
+            {/* Stats Cards */}
+            <View style={styles.statsContainer}>
+              <Animatable.View 
+                animation="fadeInLeft" 
+                duration={800}
+                delay={200}
+                style={styles.statsCard}
               >
-                <Ionicons name="person" size={40} color="#4facfe" />
-              </LinearGradient>
-            </View>
-          </View>
-        </Animatable.View>
-      </LinearGradient>
+                <LinearGradient
+                  colors={['#4facfe', '#00f2fe']}
+                  style={styles.statsGradient}
+                >
+                  <Ionicons name="game-controller" size={30} color="#fff" />
+                  <Text style={styles.statsNumber}>{stats.totalGames}</Text>
+                  <Text style={styles.statsLabel}>Games Played</Text>
+                </LinearGradient>
+              </Animatable.View>
 
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        <Animatable.View animation="fadeInUp" duration={1000} delay={200}>
-          <View style={styles.statsContainer}>
-            <View style={styles.statCard}>
-              <Ionicons name="trophy" size={24} color="#ffd700" />
-              <Text style={styles.statNumber}>12</Text>
-              <Text style={styles.statLabel}>Games Won</Text>
+              <Animatable.View 
+                animation="fadeInRight" 
+                duration={800}
+                delay={400}
+                style={styles.statsCard}
+              >
+                <LinearGradient
+                  colors={['#f093fb', '#f5576c']}
+                  style={styles.statsGradient}
+                >
+                  <Ionicons name="star" size={30} color="#fff" />
+                  <Text style={styles.statsNumber}>{stats.totalStars}</Text>
+                  <Text style={styles.statsLabel}>Stars Earned</Text>
+                </LinearGradient>
+              </Animatable.View>
             </View>
-            <View style={styles.statCard}>
-              <Ionicons name="star" size={24} color="#ff6b6b" />
-              <Text style={styles.statNumber}>156</Text>
-              <Text style={styles.statLabel}>Points Earned</Text>
-            </View>
-            <View style={styles.statCard}>
-              <Ionicons name="medal" size={24} color="#4ecdc4" />
-              <Text style={styles.statNumber}>8</Text>
-              <Text style={styles.statLabel}>Badges</Text>
-            </View>
-          </View>
-        </Animatable.View>
 
-        <Animatable.View animation="fadeInUp" duration={1000} delay={400}>
-          <View style={styles.quickActions}>
-            <Text style={styles.sectionTitle}>Quick Actions</Text>
-            
-            <TouchableOpacity style={styles.actionCard} onPress={handleStartGame}>
+            <View style={styles.statsContainer}>
+              <Animatable.View 
+                animation="fadeInLeft" 
+                duration={800}
+                delay={600}
+                style={styles.statsCard}
+              >
+                <LinearGradient
+                  colors={['#4facfe', '#00f2fe']}
+                  style={styles.statsGradient}
+                >
+                  <Ionicons name="flame" size={30} color="#fff" />
+                  <Text style={styles.statsNumber}>{stats.currentStreak}</Text>
+                  <Text style={styles.statsLabel}>Day Streak</Text>
+                </LinearGradient>
+              </Animatable.View>
+
+              <Animatable.View 
+                animation="fadeInRight" 
+                duration={800}
+                delay={800}
+                style={styles.statsCard}
+              >
+                <LinearGradient
+                  colors={['#f093fb', '#f5576c']}
+                  style={styles.statsGradient}
+                >
+                  <Ionicons name="trophy" size={30} color="#fff" />
+                  <Text style={styles.statsNumber}>{stats.bestScore}%</Text>
+                  <Text style={styles.statsLabel}>Best Score</Text>
+                </LinearGradient>
+              </Animatable.View>
+            </View>
+
+            {/* Quick Actions */}
+            <View style={styles.actionsContainer}>
+              <Text style={styles.sectionTitle}>Quick Actions</Text>
+              
+              <Animatable.View 
+                animation="fadeInUp" 
+                duration={800}
+                delay={1000}
+              >
+                <TouchableOpacity 
+                  style={styles.actionButton}
+                  onPress={handleStartGame}
+                  activeOpacity={0.8}
+                >
+                  <LinearGradient
+                    colors={['#667eea', '#764ba2']}
+                    style={styles.actionGradient}
+                  >
+                    <View style={styles.actionContent}>
+                      <View style={styles.actionIconContainer}>
+                        <Ionicons name="play" size={28} color="#fff" />
+                      </View>
+                      <View style={styles.actionTextContainer}>
+                        <Text style={styles.actionTitle}>Start New Game</Text>
+                        <Text style={styles.actionSubtitle}>Choose your subject and begin</Text>
+                      </View>
+                      <Ionicons name="arrow-forward" size={24} color="#fff" />
+                    </View>
+                  </LinearGradient>
+                </TouchableOpacity>
+              </Animatable.View>
+
+              <Animatable.View 
+                animation="fadeInUp" 
+                duration={800}
+                delay={1200}
+              >
+                <TouchableOpacity 
+                  style={styles.actionButton}
+                  onPress={handleViewResults}
+                  activeOpacity={0.8}
+                >
+                  <LinearGradient
+                    colors={['#4facfe', '#00f2fe']}
+                    style={styles.actionGradient}
+                  >
+                    <View style={styles.actionContent}>
+                      <View style={styles.actionIconContainer}>
+                        <Ionicons name="bar-chart" size={28} color="#fff" />
+                      </View>
+                      <View style={styles.actionTextContainer}>
+                        <Text style={styles.actionTitle}>View Progress</Text>
+                        <Text style={styles.actionSubtitle}>Check your performance</Text>
+                      </View>
+                      <Ionicons name="arrow-forward" size={24} color="#fff" />
+                    </View>
+                  </LinearGradient>
+                </TouchableOpacity>
+              </Animatable.View>
+
+              <Animatable.View 
+                animation="fadeInUp" 
+                duration={800}
+                delay={1400}
+              >
+                <TouchableOpacity 
+                  style={styles.actionButton}
+                  onPress={handleViewAchievements}
+                  activeOpacity={0.8}
+                >
+                  <LinearGradient
+                    colors={['#f093fb', '#f5576c']}
+                    style={styles.actionGradient}
+                  >
+                    <View style={styles.actionContent}>
+                      <View style={styles.actionIconContainer}>
+                        <Ionicons name="trophy" size={28} color="#fff" />
+                      </View>
+                      <View style={styles.actionTextContainer}>
+                        <Text style={styles.actionTitle}>Achievements</Text>
+                        <Text style={styles.actionSubtitle}>View your badges</Text>
+                      </View>
+                      <Ionicons name="arrow-forward" size={24} color="#fff" />
+                    </View>
+                  </LinearGradient>
+                </TouchableOpacity>
+              </Animatable.View>
+            </View>
+
+            {/* Popular Games */}
+            <View style={styles.gamesContainer}>
+              <Text style={styles.sectionTitle}>Popular Games</Text>
+              
+              <ScrollView 
+                horizontal 
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.gamesScroll}
+              >
+                {[
+                  { id: 1, title: 'Math Challenge', subject: 'Mathematics', color: '#4facfe', icon: 'calculator' },
+                  { id: 2, title: 'Spelling Bee', subject: 'English', color: '#f093fb', icon: 'book' },
+                  { id: 3, title: 'Science Quiz', subject: 'Science', color: '#00f2fe', icon: 'flask' },
+                  { id: 4, title: 'History Hunt', subject: 'History', color: '#f5576c', icon: 'time' },
+                ].map((game, index) => (
+                  <Animatable.View 
+                    key={game.id}
+                    animation="fadeInUp" 
+                    duration={800}
+                    delay={1600 + index * 200}
+                    style={styles.gameCard}
+                  >
+                    <TouchableOpacity 
+                      style={styles.gameCardButton}
+                      onPress={handleStartGame}
+                      activeOpacity={0.8}
+                    >
+                      <LinearGradient
+                        colors={[game.color, game.color + '80']}
+                        style={styles.gameCardGradient}
+                      >
+                        <View style={styles.gameCardContent}>
+                          <Ionicons name={game.icon as any} size={40} color="#fff" />
+                          <Text style={styles.gameCardTitle}>{game.title}</Text>
+                          <Text style={styles.gameCardSubject}>{game.subject}</Text>
+                        </View>
+                      </LinearGradient>
+                    </TouchableOpacity>
+                  </Animatable.View>
+                ))}
+              </ScrollView>
+            </View>
+
+            {/* Daily Challenge */}
+            <Animatable.View 
+              animation="fadeInUp" 
+              duration={800}
+              delay={2000}
+              style={styles.challengeContainer}
+            >
               <LinearGradient
                 colors={['#667eea', '#764ba2']}
-                style={styles.actionGradient}
+                style={styles.challengeGradient}
               >
-                <View style={styles.actionIcon}>
-                  <Ionicons name="play-circle" size={32} color="#fff" />
+                <View style={styles.challengeContent}>
+                  <View style={styles.challengeIconContainer}>
+                    <Ionicons name="flash" size={32} color="#fff" />
+                  </View>
+                  <View style={styles.challengeTextContainer}>
+                    <Text style={styles.challengeTitle}>Daily Challenge</Text>
+                    <Text style={styles.challengeSubtitle}>Complete 5 math problems</Text>
+                    <Text style={styles.challengeReward}>Reward: 10 stars</Text>
+                  </View>
+                  <TouchableOpacity 
+                    style={styles.challengeButton}
+                    onPress={handleStartGame}
+                    activeOpacity={0.8}
+                  >
+                    <Text style={styles.challengeButtonText}>Start</Text>
+                  </TouchableOpacity>
                 </View>
-                <View style={styles.actionContent}>
-                  <Text style={styles.actionTitle}>Start Playing</Text>
-                  <Text style={styles.actionDescription}>Begin your learning journey</Text>
-                </View>
-                <Ionicons name="chevron-forward" size={24} color="#fff" />
               </LinearGradient>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.actionCard} onPress={handleViewResults}>
-              <LinearGradient
-                colors={['#f093fb', '#f5576c']}
-                style={styles.actionGradient}
-              >
-                <View style={styles.actionIcon}>
-                  <Ionicons name="analytics" size={32} color="#fff" />
-                </View>
-                <View style={styles.actionContent}>
-                  <Text style={styles.actionTitle}>View Results</Text>
-                  <Text style={styles.actionDescription}>Check your progress</Text>
-                </View>
-                <Ionicons name="chevron-forward" size={24} color="#fff" />
-              </LinearGradient>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.actionCard} onPress={handleViewAchievements}>
-              <LinearGradient
-                colors={['#4facfe', '#00f2fe']}
-                style={styles.actionGradient}
-              >
-                <View style={styles.actionIcon}>
-                  <Ionicons name="trophy" size={32} color="#fff" />
-                </View>
-                <View style={styles.actionContent}>
-                  <Text style={styles.actionTitle}>Achievements</Text>
-                  <Text style={styles.actionDescription}>View your badges</Text>
-                </View>
-                <Ionicons name="chevron-forward" size={24} color="#fff" />
-              </LinearGradient>
-            </TouchableOpacity>
-          </View>
-        </Animatable.View>
-
-        <Animatable.View animation="fadeInUp" duration={1000} delay={600}>
-          <View style={styles.gamesSection}>
-            <Text style={styles.sectionTitle}>Popular Games</Text>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              <View style={styles.gameCard}>
-                <LinearGradient
-                  colors={['#ff9a9e', '#fecfef']}
-                  style={styles.gameGradient}
-                >
-                  <Ionicons name="calculator" size={40} color="#fff" />
-                  <Text style={styles.gameTitle}>Math Quest</Text>
-                  <Text style={styles.gameDescription}>Solve math problems</Text>
-                </LinearGradient>
-              </View>
-              <View style={styles.gameCard}>
-                <LinearGradient
-                  colors={['#a8edea', '#fed6e3']}
-                  style={styles.gameGradient}
-                >
-                  <Ionicons name="book" size={40} color="#fff" />
-                  <Text style={styles.gameTitle}>Word Master</Text>
-                  <Text style={styles.gameDescription}>Spelling challenges</Text>
-                </LinearGradient>
-              </View>
-              <View style={styles.gameCard}>
-                <LinearGradient
-                  colors={['#ffecd2', '#fcb69f']}
-                  style={styles.gameGradient}
-                >
-                  <Ionicons name="bulb" size={40} color="#fff" />
-                  <Text style={styles.gameTitle}>Brain Teaser</Text>
-                  <Text style={styles.gameDescription}>Logic puzzles</Text>
-                </LinearGradient>
-              </View>
-            </ScrollView>
-          </View>
-        </Animatable.View>
-      </ScrollView>
+            </Animatable.View>
+          </ScrollView>
+        </Animated.View>
+      </LinearGradient>
     </View>
   );
 };
@@ -178,44 +399,56 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({ navigation }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f9fa',
+  },
+  backgroundGradient: {
+    flex: 1,
+  },
+  floatingElements: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  floatingElement: {
+    position: 'absolute',
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
   },
   header: {
-    paddingTop: 50,
-    paddingBottom: 30,
-    paddingHorizontal: 20,
+    paddingTop: 60,
+    paddingHorizontal: 25,
+    paddingBottom: 20,
   },
   headerContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  welcomeContainer: {
+  greetingContainer: {
     flex: 1,
   },
-  welcomeText: {
-    fontSize: 16,
-    color: 'rgba(255, 255, 255, 0.8)',
+  greeting: {
+    fontSize: 24,
+    fontWeight: '300',
+    color: '#fff',
     marginBottom: 5,
   },
-  title: {
-    fontSize: 28,
+  studentName: {
+    fontSize: 32,
     fontWeight: 'bold',
-    color: 'white',
-    marginBottom: 8,
+    color: '#fff',
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
   },
-  subtitle: {
-    fontSize: 16,
-    color: 'rgba(255, 255, 255, 0.9)',
-    lineHeight: 22,
-  },
-  avatarContainer: {
-    marginLeft: 20,
-  },
-  avatar: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+  settingsButton: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000',
@@ -229,125 +462,202 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: 25,
+  },
+  scrollContent: {
+    paddingBottom: 30,
   },
   statsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: -20,
-    marginBottom: 30,
+    marginBottom: 20,
   },
-  statCard: {
+  statsCard: {
     flex: 1,
-    backgroundColor: 'white',
-    borderRadius: 15,
-    padding: 20,
-    alignItems: 'center',
     marginHorizontal: 5,
+    borderRadius: 20,
+    overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 8,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
+    shadowOpacity: 0.3,
+    shadowRadius: 15,
+    elevation: 15,
   },
-  statNumber: {
-    fontSize: 24,
+  statsGradient: {
+    padding: 20,
+    alignItems: 'center',
+  },
+  statsNumber: {
+    fontSize: 28,
     fontWeight: 'bold',
-    color: '#333',
-    marginTop: 8,
-    marginBottom: 4,
+    color: '#fff',
+    marginTop: 10,
+    marginBottom: 5,
   },
-  statLabel: {
-    fontSize: 12,
-    color: '#666',
+  statsLabel: {
+    fontSize: 14,
+    color: 'rgba(255, 255, 255, 0.9)',
+    fontWeight: '500',
     textAlign: 'center',
   },
-  quickActions: {
+  actionsContainer: {
     marginBottom: 30,
   },
   sectionTitle: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#fff',
     marginBottom: 20,
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
   },
-  actionCard: {
-    marginBottom: 15,
-    borderRadius: 15,
+  actionButton: {
+    borderRadius: 20,
     overflow: 'hidden',
+    marginBottom: 15,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 8,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
+    shadowOpacity: 0.3,
+    shadowRadius: 15,
+    elevation: 15,
   },
   actionGradient: {
-    flexDirection: 'row',
-    alignItems: 'center',
     padding: 20,
   },
-  actionIcon: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+  actionContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  actionIconContainer: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 15,
+    marginRight: 20,
   },
-  actionContent: {
+  actionTextContainer: {
     flex: 1,
   },
   actionTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
-    color: 'white',
-    marginBottom: 4,
+    color: '#fff',
+    marginBottom: 5,
   },
-  actionDescription: {
-    fontSize: 14,
+  actionSubtitle: {
+    fontSize: 16,
     color: 'rgba(255, 255, 255, 0.8)',
   },
-  gamesSection: {
+  gamesContainer: {
     marginBottom: 30,
   },
+  gamesScroll: {
+    paddingRight: 25,
+  },
   gameCard: {
-    width: 140,
     marginRight: 15,
-    borderRadius: 15,
+    borderRadius: 20,
     overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 8,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
+    shadowOpacity: 0.3,
+    shadowRadius: 15,
+    elevation: 15,
   },
-  gameGradient: {
-    padding: 20,
-    alignItems: 'center',
-    minHeight: 120,
+  gameCardButton: {
+    width: 150,
+    height: 120,
+  },
+  gameCardGradient: {
+    flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
+    padding: 15,
   },
-  gameTitle: {
+  gameCardContent: {
+    alignItems: 'center',
+  },
+  gameCardTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: 'white',
+    color: '#fff',
     marginTop: 10,
     marginBottom: 5,
     textAlign: 'center',
   },
-  gameDescription: {
+  gameCardSubject: {
     fontSize: 12,
     color: 'rgba(255, 255, 255, 0.8)',
     textAlign: 'center',
+  },
+  challengeContainer: {
+    borderRadius: 25,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 12,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 20,
+    elevation: 20,
+  },
+  challengeGradient: {
+    padding: 25,
+  },
+  challengeContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  challengeIconContainer: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 20,
+  },
+  challengeTextContainer: {
+    flex: 1,
+  },
+  challengeTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#fff',
+    marginBottom: 5,
+  },
+  challengeSubtitle: {
+    fontSize: 16,
+    color: 'rgba(255, 255, 255, 0.8)',
+    marginBottom: 5,
+  },
+  challengeReward: {
+    fontSize: 14,
+    color: 'rgba(255, 255, 255, 0.9)',
+    fontWeight: '600',
+  },
+  challengeButton: {
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 20,
+  },
+  challengeButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
