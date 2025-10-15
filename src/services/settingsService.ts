@@ -1,12 +1,12 @@
-import { SecureStorage } from './secureStorage';
-import { AppSettings, DEFAULT_SETTINGS, LanguageOption, THEME_OPTIONS } from '../types/settings';
+import { SecureStorageService } from './secureStorage';
+import { AppSettings, DEFAULT_SETTINGS, LANGUAGE_OPTIONS, THEME_OPTIONS } from '../types/settings';
 
 export class SettingsService {
   private static readonly SETTINGS_KEY = 'app_settings';
 
   static async getSettings(): Promise<AppSettings> {
     try {
-      const settingsJson = await SecureStorage.get(this.SETTINGS_KEY);
+      const settingsJson = await SecureStorageService.get(this.SETTINGS_KEY);
       if (settingsJson) {
         const settings = JSON.parse(settingsJson);
         // Merge with default settings to ensure all properties exist
@@ -28,7 +28,7 @@ export class SettingsService {
         lastUpdated: new Date().toISOString(),
       };
       
-      await SecureStorage.save(this.SETTINGS_KEY, JSON.stringify(updatedSettings));
+      await SecureStorageService.save(this.SETTINGS_KEY, JSON.stringify(updatedSettings));
       return updatedSettings;
     } catch (error) {
       console.error('Update settings error:', error);
@@ -38,7 +38,7 @@ export class SettingsService {
 
   static async resetSettings(): Promise<AppSettings> {
     try {
-      await SecureStorage.delete(this.SETTINGS_KEY);
+      await SecureStorageService.delete(this.SETTINGS_KEY);
       return DEFAULT_SETTINGS;
     } catch (error) {
       console.error('Reset settings error:', error);
@@ -89,7 +89,7 @@ export class SettingsService {
       ];
 
       for (const key of keys) {
-        await SecureStorage.delete(key);
+        await SecureStorageService.delete(key);
       }
     } catch (error) {
       console.error('Clear all data error:', error);
@@ -112,7 +112,7 @@ export class SettingsService {
       const settings = JSON.parse(settingsJson);
       // Validate settings structure
       const validatedSettings = { ...DEFAULT_SETTINGS, ...settings };
-      await SecureStorage.save(this.SETTINGS_KEY, JSON.stringify(validatedSettings));
+      await SecureStorageService.save(this.SETTINGS_KEY, JSON.stringify(validatedSettings));
       return validatedSettings;
     } catch (error) {
       console.error('Import settings error:', error);
@@ -121,7 +121,7 @@ export class SettingsService {
   }
 
   static getLanguageName(code: string): string {
-    const language = LanguageOption.find(lang => lang.code === code);
+    const language = LANGUAGE_OPTIONS.find(lang => lang.code === code);
     return language ? language.name : 'English';
   }
 

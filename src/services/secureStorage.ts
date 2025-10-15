@@ -67,4 +67,31 @@ export class SecureStorageService {
       console.error('Error clearing all data:', error);
     }
   }
+
+  // Generic methods for any key-value storage
+  static async save(key: string, value: string): Promise<void> {
+    try {
+      await SecureStore.setItemAsync(key, value);
+    } catch (error) {
+      console.error('Error saving data:', error);
+      throw new Error('Failed to save data');
+    }
+  }
+
+  static async get(key: string): Promise<string | null> {
+    try {
+      return await SecureStore.getItemAsync(key);
+    } catch (error) {
+      console.error('Error retrieving data:', error);
+      return null;
+    }
+  }
+
+  static async delete(key: string): Promise<void> {
+    try {
+      await SecureStore.deleteItemAsync(key);
+    } catch (error) {
+      console.error('Error deleting data:', error);
+    }
+  }
 }
