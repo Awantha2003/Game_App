@@ -228,10 +228,13 @@ export const ResultsAnalyticsScreen: React.FC<ResultsAnalyticsScreenProps> = ({ 
               <Ionicons name="trending-up" size={24} color="#4facfe" />
               <View style={styles.insightContent}>
                 <Text style={styles.insightTitle}>Engagement Trend</Text>
-                <Text style={styles.insightValue} style={{ 
-                  color: insights.engagementTrend === 'increasing' ? '#34C759' : 
-                         insights.engagementTrend === 'decreasing' ? '#FF3B30' : '#FF9500'
-                }}>
+                <Text style={[
+                  styles.insightValue,
+                  { 
+                    color: insights.engagementTrend === 'increasing' ? '#34C759' : 
+                           insights.engagementTrend === 'decreasing' ? '#FF3B30' : '#FF9500'
+                  }
+                ]}>
                   {insights.engagementTrend.charAt(0).toUpperCase() + insights.engagementTrend.slice(1)}
                 </Text>
               </View>

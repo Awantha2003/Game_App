@@ -1,4 +1,4 @@
-import { SecureStorage } from './secureStorage';
+import { SecureStorageService } from './secureStorage';
 
 // Mock API base URL - replace with your actual backend URL
 const API_BASE_URL = 'http://localhost:3000/api';
@@ -113,7 +113,7 @@ export class AuthServiceEnhanced {
 
   static async refreshAccessToken(): Promise<AuthTokens> {
     try {
-      const refreshToken = await SecureStorage.get(this.REFRESH_TOKEN_KEY);
+      const refreshToken = await SecureStorageService.get(this.REFRESH_TOKEN_KEY);
       if (!refreshToken) {
         throw new Error('No refresh token available');
       }
@@ -154,13 +154,13 @@ export class AuthServiceEnhanced {
 
   static async logout(): Promise<void> {
     try {
-      const refreshToken = await SecureStorage.get(this.REFRESH_TOKEN_KEY);
+      const refreshToken = await SecureStorageService.get(this.REFRESH_TOKEN_KEY);
       
       // Clear local storage
-      await SecureStorage.delete(this.ACCESS_TOKEN_KEY);
-      await SecureStorage.delete(this.REFRESH_TOKEN_KEY);
-      await SecureStorage.delete(this.USER_PROFILE_KEY);
-      await SecureStorage.delete(this.TOKEN_EXPIRY_KEY);
+      await SecureStorageService.delete(this.ACCESS_TOKEN_KEY);
+      await SecureStorageService.delete(this.REFRESH_TOKEN_KEY);
+      await SecureStorageService.delete(this.USER_PROFILE_KEY);
+      await SecureStorageService.delete(this.TOKEN_EXPIRY_KEY);
 
       // Revoke token on server (if available)
       if (refreshToken) {
@@ -183,7 +183,7 @@ export class AuthServiceEnhanced {
 
   static async getCurrentUser(): Promise<UserProfile | null> {
     try {
-      const userProfile = await SecureStorage.get(this.USER_PROFILE_KEY);
+      const userProfile = await SecureStorageService.get(this.USER_PROFILE_KEY);
       return userProfile ? JSON.parse(userProfile) : null;
     } catch (error) {
       console.error('Get current user error:', error);
@@ -193,8 +193,8 @@ export class AuthServiceEnhanced {
 
   static async getAccessToken(): Promise<string | null> {
     try {
-      const token = await SecureStorage.get(this.ACCESS_TOKEN_KEY);
-      const expiry = await SecureStorage.get(this.TOKEN_EXPIRY_KEY);
+      const token = await SecureStorageService.get(this.ACCESS_TOKEN_KEY);
+      const expiry = await SecureStorageService.get(this.TOKEN_EXPIRY_KEY);
       
       if (!token || !expiry) {
         return null;
@@ -373,13 +373,13 @@ export class AuthServiceEnhanced {
   }
 
   private static async storeTokens(tokens: AuthTokens): Promise<void> {
-    await SecureStorage.save(this.ACCESS_TOKEN_KEY, tokens.accessToken);
-    await SecureStorage.save(this.REFRESH_TOKEN_KEY, tokens.refreshToken);
-    await SecureStorage.save(this.TOKEN_EXPIRY_KEY, tokens.expiresAt.toString());
+    await SecureStorageService.save(this.ACCESS_TOKEN_KEY, tokens.accessToken);
+    await SecureStorageService.save(this.REFRESH_TOKEN_KEY, tokens.refreshToken);
+    await SecureStorageService.save(this.TOKEN_EXPIRY_KEY, tokens.expiresAt.toString());
   }
 
   private static async storeUserProfile(user: UserProfile): Promise<void> {
-    await SecureStorage.save(this.USER_PROFILE_KEY, JSON.stringify(user));
+    await SecureStorageService.save(this.USER_PROFILE_KEY, JSON.stringify(user));
   }
 
   private static generateMockToken(userId: string, type: string): string {
