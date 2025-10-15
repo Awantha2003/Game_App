@@ -15,12 +15,7 @@ import { QuestionService } from '../services/questionService';
 
 interface QuestionFormScreenProps {
   navigation: any;
-  route: {
-    params: {
-      question?: Question;
-      mode: 'create' | 'edit';
-    };
-  };
+  route: any;
 }
 
 export const QuestionFormScreen: React.FC<QuestionFormScreenProps> = ({ navigation, route }) => {
