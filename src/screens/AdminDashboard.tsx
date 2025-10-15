@@ -41,10 +41,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ navigation }) =>
     navigation.navigate('LevelList');
   };
 
-  const handleViewAnalytics = () => {
-    Alert.alert('Analytics', 'Analytics functionality will be implemented in the next phase');
-  };
-
   const handleSystemSettings = () => {
     Alert.alert('System Settings', 'System settings functionality will be implemented in the next phase');
   };
