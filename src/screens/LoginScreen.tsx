@@ -17,7 +17,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import * as Animatable from 'react-native-animatable';
 import { useAuth } from '../contexts/AuthContext';
-import { LoginTest } from '../components/LoginTest';
+// import { LoginTest } from '../components/LoginTest';
 
 const { height, width } = Dimensions.get('screen');
 
@@ -409,15 +409,15 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
               </TouchableOpacity>
             </Animatable.View>
 
-            {/* Temporary Login Test Component */}
-            <Animatable.View 
+            {/* Temporary Login Test Component - Disabled for now */}
+            {/* <Animatable.View 
               animation="fadeInUp" 
               duration={800}
               delay={1800}
               style={styles.testContainer}
             >
               <LoginTest />
-            </Animatable.View>
+            </Animatable.View> */}
           </View>
         </Animated.View>
       </LinearGradient>

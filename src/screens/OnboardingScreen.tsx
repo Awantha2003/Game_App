@@ -22,8 +22,8 @@ interface OnboardingSlide {
   id: number;
   title: string;
   description: string;
-  icon: string;
-  gradient: string[];
+  icon: keyof typeof Ionicons.glyphMap;
+  gradient: [string, string, ...string[]];
 }
 
 const onboardingSlides: OnboardingSlide[] = [
