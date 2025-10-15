@@ -64,6 +64,10 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
     navigation.navigate('QuestionList');
   };
 
+  const handleManageLevels = () => {
+    navigation.navigate('LevelList');
+  };
+
   const handleLogout = () => {
     Alert.alert(
       'Logout',
@@ -229,9 +233,14 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation }) => {
         )}
 
         {(user?.role === 'teacher' || user?.role === 'admin') && (
-          <TouchableOpacity style={styles.manageQuestionsButton} onPress={handleManageQuestions}>
-            <Text style={styles.manageQuestionsButtonText}>Manage Questions</Text>
-          </TouchableOpacity>
+          <View style={styles.managementButtons}>
+            <TouchableOpacity style={styles.manageQuestionsButton} onPress={handleManageQuestions}>
+              <Text style={styles.manageQuestionsButtonText}>Manage Questions</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.manageLevelsButton} onPress={handleManageLevels}>
+              <Text style={styles.manageLevelsButtonText}>Manage Levels</Text>
+            </TouchableOpacity>
+          </View>
         )}
       </View>
 
@@ -387,14 +396,28 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 50,
   },
+  managementButtons: {
+    margin: 20,
+  },
   manageQuestionsButton: {
     backgroundColor: '#34C759',
-    margin: 20,
+    padding: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  manageQuestionsButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  manageLevelsButton: {
+    backgroundColor: '#667eea',
     padding: 16,
     borderRadius: 8,
     alignItems: 'center',
   },
-  manageQuestionsButtonText: {
+  manageLevelsButtonText: {
     color: 'white',
     fontSize: 16,
     fontWeight: '600',

@@ -21,6 +21,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ navigation }) =>
     navigation.navigate('QuestionList');
   };
 
+  const handleManageLevels = () => {
+    navigation.navigate('LevelList');
+  };
+
   const handleViewAnalytics = () => {
     Alert.alert('Analytics', 'Analytics functionality will be implemented in the next phase');
   };
@@ -50,10 +54,20 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ navigation }) =>
         <View style={styles.card}>
           <Text style={styles.cardTitle}>❓ Question Management</Text>
           <Text style={styles.cardDescription}>
-            Create, edit, and organize questions and levels
+            Create, edit, and organize questions
           </Text>
           <TouchableOpacity style={styles.secondaryButton} onPress={handleManageQuestions}>
             <Text style={styles.secondaryButtonText}>Manage Questions</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>📚 Level Management</Text>
+          <Text style={styles.cardDescription}>
+            Create and manage educational levels
+          </Text>
+          <TouchableOpacity style={styles.secondaryButton} onPress={handleManageLevels}>
+            <Text style={styles.secondaryButtonText}>Manage Levels</Text>
           </TouchableOpacity>
         </View>
 

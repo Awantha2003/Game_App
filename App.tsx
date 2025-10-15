@@ -11,6 +11,8 @@ import { StudentDashboard } from './src/screens/StudentDashboard';
 import { AdminDashboard } from './src/screens/AdminDashboard';
 import { QuestionListScreen } from './src/screens/QuestionListScreen';
 import { QuestionFormScreen } from './src/screens/QuestionFormScreen';
+import { LevelListScreen } from './src/screens/LevelListScreen';
+import { LevelFormScreen } from './src/screens/LevelFormScreen';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 
 const Stack = createStackNavigator();
@@ -43,6 +45,8 @@ const TeacherNavigator = () => (
     <Stack.Screen name="Profile" component={ProfileScreen} />
     <Stack.Screen name="QuestionList" component={QuestionListScreen} />
     <Stack.Screen name="QuestionForm" component={QuestionFormScreen} />
+    <Stack.Screen name="LevelList" component={LevelListScreen} />
+    <Stack.Screen name="LevelForm" component={LevelFormScreen} />
   </Stack.Navigator>
 );
 
@@ -56,6 +60,8 @@ const AdminNavigator = () => (
     <Stack.Screen name="Profile" component={ProfileScreen} />
     <Stack.Screen name="QuestionList" component={QuestionListScreen} />
     <Stack.Screen name="QuestionForm" component={QuestionFormScreen} />
+    <Stack.Screen name="LevelList" component={LevelListScreen} />
+    <Stack.Screen name="LevelForm" component={LevelFormScreen} />
   </Stack.Navigator>
 );
 
@@ -87,7 +93,7 @@ export default function App() {
   return (
     <AuthProvider>
       <NavigationContainer>
-        <StatusBar style="auto" />
+      <StatusBar style="auto" />
         <AppNavigator />
       </NavigationContainer>
     </AuthProvider>
