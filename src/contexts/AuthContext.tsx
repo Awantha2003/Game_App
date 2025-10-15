@@ -33,11 +33,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = async (email: string, password: string) => {
     try {
+      console.log('AuthContext.login called with:', email, password);
       setIsLoading(true);
       const response = await AuthService.login({ email, password });
+      console.log('AuthService.login response:', response);
       setUser(response.user);
+      console.log('User set in context:', response.user);
     } catch (error) {
-      console.error('Login error:', error);
+      console.error('Login error in AuthContext:', error);
       throw error;
     } finally {
       setIsLoading(false);

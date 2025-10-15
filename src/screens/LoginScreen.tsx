@@ -43,9 +43,12 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
 
     try {
       setIsLoading(true);
+      console.log('Attempting login with:', email.trim(), password);
       await login(email.trim(), password);
+      console.log('Login successful');
       // Navigation will be handled by the auth context
     } catch (error) {
+      console.error('Login error:', error);
       Alert.alert('Login Failed', 'Invalid email or password. Please try again.');
     } finally {
       setIsLoading(false);

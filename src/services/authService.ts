@@ -7,8 +7,11 @@ const API_BASE_URL = 'http://localhost:3000/api';
 export class AuthService {
   static async login(loginData: LoginData): Promise<AuthResponse> {
     try {
+      console.log('AuthService.login called with:', loginData.email, loginData.password);
+      
       // Check for specific teacher credentials
       if (loginData.email === 't1@gmail.com' && loginData.password === 'Teacher123@') {
+        console.log('Teacher credentials matched');
         const mockResponse: AuthResponse = {
           user: {
             id: '2',
@@ -29,25 +32,52 @@ export class AuthService {
         return mockResponse;
       }
 
-      // For other users, use generic mock data
-      const mockResponse: AuthResponse = {
-        user: {
-          id: '1',
-          email: loginData.email,
-          name: 'John Doe',
-          role: 'teacher',
-          isActive: true,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        },
-        token: 'mock-jwt-token-' + Date.now()
-      };
+      // Check for admin credentials
+      if (loginData.email === 'admin@edugame.com' && loginData.password === 'admin123') {
+        const mockResponse: AuthResponse = {
+          user: {
+            id: '1',
+            email: 'admin@edugame.com',
+            name: 'Admin User',
+            role: 'admin',
+            isActive: true,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+          },
+          token: 'mock-jwt-token-' + Date.now()
+        };
 
-      // Store token and user data securely
-      await SecureStorageService.setToken(mockResponse.token);
-      await SecureStorageService.setUser(mockResponse.user);
+        // Store token and user data securely
+        await SecureStorageService.setToken(mockResponse.token);
+        await SecureStorageService.setUser(mockResponse.user);
 
-      return mockResponse;
+        return mockResponse;
+      }
+
+      // For demo purposes, allow any other email/password combination as student
+      if (loginData.email && loginData.password) {
+        const mockResponse: AuthResponse = {
+          user: {
+            id: '3',
+            email: loginData.email,
+            name: 'Student User',
+            role: 'student',
+            isActive: true,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+          },
+          token: 'mock-jwt-token-' + Date.now()
+        };
+
+        // Store token and user data securely
+        await SecureStorageService.setToken(mockResponse.token);
+        await SecureStorageService.setUser(mockResponse.user);
+
+        return mockResponse;
+      }
+
+      // If no valid credentials provided
+      throw new Error('Invalid email or password');
 
       // Uncomment below for real API integration:
       /*
