@@ -56,6 +56,10 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
     navigation.navigate('Register');
   };
 
+  const navigateToForgotPassword = () => {
+    navigation.navigate('ForgotPassword');
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#667eea" />
@@ -153,6 +157,13 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
                 <Ionicons name="play" size={20} color="#fff" />
                 <Text style={styles.studentButtonText}>Continue as Student</Text>
               </LinearGradient>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={styles.forgotPasswordButton}
+              onPress={navigateToForgotPassword}
+            >
+              <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
             </TouchableOpacity>
 
             <View style={styles.registerContainer}>
@@ -321,6 +332,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginLeft: 10,
+  },
+  forgotPasswordButton: {
+    alignItems: 'center',
+    marginTop: 15,
+  },
+  forgotPasswordText: {
+    fontSize: 14,
+    color: '#667eea',
+    fontWeight: '600',
   },
   registerContainer: {
     flexDirection: 'row',

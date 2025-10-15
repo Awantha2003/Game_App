@@ -7,6 +7,7 @@ import { AuthProvider, useAuth } from './src/contexts/AuthContext';
 import { SplashScreen } from './src/screens/SplashScreen';
 import { OnboardingScreen } from './src/screens/OnboardingScreen';
 import { LoginScreen } from './src/screens/LoginScreen';
+import { ForgotPasswordScreen } from './src/screens/ForgotPasswordScreen';
 import { RegisterScreen } from './src/screens/RegisterScreen';
 import { ProfileScreen } from './src/screens/ProfileScreen';
 import { StudentDashboard } from './src/screens/StudentDashboard';
@@ -18,6 +19,8 @@ import { AdminDashboard } from './src/screens/AdminDashboard';
 import { QuestionListScreen } from './src/screens/QuestionListScreen';
 import { QuestionFormScreen } from './src/screens/QuestionFormScreen';
 import { ResultsListScreen } from './src/screens/ResultsListScreen';
+import { FeedbackFormScreen } from './src/screens/FeedbackFormScreen';
+import { FeedbackListScreen } from './src/screens/FeedbackListScreen';
 import { LevelListScreen } from './src/screens/LevelListScreen';
 import { LevelFormScreen } from './src/screens/LevelFormScreen';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
@@ -40,6 +43,7 @@ const AuthNavigator = () => (
     <Stack.Screen name="Splash" component={SplashScreen} />
     <Stack.Screen name="Onboarding" component={OnboardingScreen} />
     <Stack.Screen name="Login" component={LoginScreen} />
+    <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
     <Stack.Screen name="Register" component={RegisterScreen} />
     <Stack.Screen name="StudentDashboard" component={StudentDashboard} />
   </Stack.Navigator>
@@ -71,6 +75,8 @@ const TeacherNavigator = () => (
     <Stack.Screen name="LevelList" component={LevelListScreen} />
     <Stack.Screen name="LevelForm" component={LevelFormScreen} />
     <Stack.Screen name="ResultsList" component={ResultsListScreen} />
+    <Stack.Screen name="FeedbackForm" component={FeedbackFormScreen} />
+    <Stack.Screen name="FeedbackList" component={FeedbackListScreen} />
   </Stack.Navigator>
 );
 
@@ -87,6 +93,8 @@ const AdminNavigator = () => (
     <Stack.Screen name="LevelList" component={LevelListScreen} />
     <Stack.Screen name="LevelForm" component={LevelFormScreen} />
     <Stack.Screen name="ResultsList" component={ResultsListScreen} />
+    <Stack.Screen name="FeedbackForm" component={FeedbackFormScreen} />
+    <Stack.Screen name="FeedbackList" component={FeedbackListScreen} />
   </Stack.Navigator>
 );
 
