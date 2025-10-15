@@ -29,6 +29,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ navigation }) =>
     navigation.navigate('FeedbackList');
   };
 
+  const handleViewAnalytics = () => {
+    navigation.navigate('ResultsAnalytics');
+  };
+
+  const handleOpenSettings = () => {
+    navigation.navigate('Settings');
+  };
+
   const handleManageLevels = () => {
     navigation.navigate('LevelList');
   };
@@ -106,6 +114,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ navigation }) =>
           </Text>
           <TouchableOpacity style={styles.secondaryButton} onPress={handleViewAnalytics}>
             <Text style={styles.secondaryButtonText}>View Analytics</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>⚙️ Settings</Text>
+          <Text style={styles.cardDescription}>
+            Configure app settings and preferences
+          </Text>
+          <TouchableOpacity style={styles.secondaryButton} onPress={handleOpenSettings}>
+            <Text style={styles.secondaryButtonText}>Open Settings</Text>
           </TouchableOpacity>
         </View>
 

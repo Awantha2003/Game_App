@@ -21,6 +21,8 @@ import { QuestionFormScreen } from './src/screens/QuestionFormScreen';
 import { ResultsListScreen } from './src/screens/ResultsListScreen';
 import { FeedbackFormScreen } from './src/screens/FeedbackFormScreen';
 import { FeedbackListScreen } from './src/screens/FeedbackListScreen';
+import { ResultsAnalyticsScreen } from './src/screens/ResultsAnalyticsScreen';
+import { SettingsScreen } from './src/screens/SettingsScreen';
 import { LevelListScreen } from './src/screens/LevelListScreen';
 import { LevelFormScreen } from './src/screens/LevelFormScreen';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
@@ -75,8 +77,10 @@ const TeacherNavigator = () => (
     <Stack.Screen name="LevelList" component={LevelListScreen} />
     <Stack.Screen name="LevelForm" component={LevelFormScreen} />
     <Stack.Screen name="ResultsList" component={ResultsListScreen} />
+    <Stack.Screen name="ResultsAnalytics" component={ResultsAnalyticsScreen} />
     <Stack.Screen name="FeedbackForm" component={FeedbackFormScreen} />
     <Stack.Screen name="FeedbackList" component={FeedbackListScreen} />
+    <Stack.Screen name="Settings" component={SettingsScreen} />
   </Stack.Navigator>
 );
 
@@ -93,8 +97,10 @@ const AdminNavigator = () => (
     <Stack.Screen name="LevelList" component={LevelListScreen} />
     <Stack.Screen name="LevelForm" component={LevelFormScreen} />
     <Stack.Screen name="ResultsList" component={ResultsListScreen} />
+    <Stack.Screen name="ResultsAnalytics" component={ResultsAnalyticsScreen} />
     <Stack.Screen name="FeedbackForm" component={FeedbackFormScreen} />
     <Stack.Screen name="FeedbackList" component={FeedbackListScreen} />
+    <Stack.Screen name="Settings" component={SettingsScreen} />
   </Stack.Navigator>
 );
 
